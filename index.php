@@ -1,19 +1,24 @@
 <html>
 <head>
-<title>A BASIC HTML FORM</title>
+<title>Mobile ID WebService</title>
 
 <?PHP
-
-
+	$idNumber = $_GET['idNumber'];
+	if(is_numeric($idNumber)){
+		echo "input valid (numeric)";
+	}
+	else {
+		echo "input is not numeric";
+	}
 ?>
 
 </head>
 <body>
 
-<FORM NAME ="form1" METHOD =" " ACTION = "">
+<FORM NAME ="idNumber" METHOD ="post" ACTION = "">
 
-<INPUT TYPE = "TEXT" VALUE ="username">
-<INPUT TYPE = "Submit" Name = "Submit1" VALUE = "Login">
+<INPUT TYPE = "TEXT" VALUE ="ID Number">
+<INPUT TYPE = "Submit" Name = "Submit1" VALUE = "Proceed">
 
 </FORM>
 </body>
