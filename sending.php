@@ -47,7 +47,7 @@ if ($sendquery["STATUS"]["Success"] == true) {
                             // put result data into "obj"
                             var obj = jQuery.parseJSON(data);
                             // put the data_from_file into #response
-                            $('#response').html(obj.data_from_file);
+                            $('#response').html(obj.data_from_file.join("<br/>"));
                             // call the function again, this time with the timestamp we just got from server.php
                             getContent(obj.timestamp);
                         }
