@@ -27,18 +27,17 @@ $sendquery  = sendpost($CAaddr,$request);
 if ($sendquery["STATUS"]["Success"] == true) {
     $pid = $sendquery["STATUS"]["PID"];
 }
-?>
 
+sleep(2);
+
+?>
 <html>
-    <head>
-        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-        <!--<script type="text/javascript" src="client.js"></script>-->
+	<head>
+		<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
         <script type="text/javascript">
-            // function getContent(file_id,timestamp)
             function getContent(timestamp)
             {
                 var file_id = '<?php echo "$id_number.$pid"; ?>';
-
                 $.ajax(
                     {
                         type: 'GET',
@@ -46,25 +45,28 @@ if ($sendquery["STATUS"]["Success"] == true) {
                         success: function(data){
                             // put result data into "obj"
                             var obj = jQuery.parseJSON(data);
+                            console.log(obj);
                             // put the data_from_file into #response
-                            $('#response').html(obj.data_from_file.join("<br/>"));
-                            // call the function again, this time with the timestamp we just got from server.php
-                            getContent(obj.timestamp);
+                            if(obj.data_from_file[0] === "Menunggu konfirmasi.."){
+	                            $('#response').html(obj.data_from_file.join("<br/>"));
+	                            // call the function again, this time with the timestamp we just got from server.php
+	                            getContent(obj.timestamp);
+	                        } else {
+	                        	$('#response').html("Log in berhasil!");
+	                        	//delay >> redirect
+	                        }
                         }
                     }
                 );
             }
             // initialize jQuery
             $(function() {
-                // var pid = '<?php echo $id_number.$pid;?>';
-                // $('#response').html(pid);
-                // getContent(pid,0);
                 getContent(0);
             });
         </script>
-    </head>
-    <body>
-        <h1>Response from server:</h1>
+	</head>
+	<body>
+		<h1>Memproses autentikasi:</h1>
         <div id="response"></div>
-    </body>
+	</body>
 </html>

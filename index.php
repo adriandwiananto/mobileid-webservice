@@ -1,58 +1,108 @@
-<!--<?php
-// session_start();
+<!DOCTYPE html>
+<html lang="en">
 
-// if (isset($_POST['SubmitCheck'])) {
-//     if ($_POST['no_ktp']) {
-//         //echo "login success";
-//         $_SESSION['USERID'] = $_POST['no_ktp']; 
-//         $_SESSION['LOGIN'] = TRUE;
-//         header('Location: home.php');
-//         exit;
-//     }
-//     else {
-//         echo "login failed";
-//         $page = $_SERVER['PHP_SELF'];
-//         header("Refresh: 1; url=$page");
-//     }
-// }
-// else {
-    // The form has not been posted
-    // Show the form
-    ?>-->
-<html>
-  
-  <head>
-    <title>Sign In</title>
-    <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link type ="text/css" rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="script.js"></script>
-  </head>
-  
-  <body>
-    <div class="jumbotron">
-      <h1>DocSigner</h1>
-      <p>Tandatangan dokumen anda via web</p>
-      <p><a class="btn btn-primary btn-lg">Cara Kerja</a></p>
-    </div>
+<head>
+    <title>Mobile ID</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/heroic-features.css" rel="stylesheet">
+
+    <!-- jQuery Version 1.11.0 -->
+    <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="js/jquery.numeric.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".numeric").numeric();
+            $('.form-signin').bind("keyup keypress", function(e) {
+                var code = e.keyCode || e.which;
+                //disable enter key form
+                if (code  == 13) {
+                    // $('.debugger').html("Enter pressed").show().fadeOut("slow");
+                    e.preventDefault();
+                    //return false;
+                }
+
+                var digit = $('.form-control').val().length;
+                // $(".debugger").html("char len:"+digit).show();
+                if($('button').length == 0){
+                    if(digit == 16){
+                        $('form').append('<button class="btn btn-primary" type="submit">Log In</button>');
+                    }
+                }else{
+                    if(digit != 16){
+                        $('button').remove();
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Page Content -->
     <div class="container">
-      <!-- <form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post"> -->
-      <form class="form-signin" action="sending.php" method="post">
-        <h2 class="form-signin-heading text-left">Untuk mulai, masukkan nomor KTP</h2>
-        <input type="text" maxlength="16" class="form-control" placeholder="No.KTP" name="no_ktp">
-        <!--<input type="hidden" name="SubmitCheck" value="sent">-->
-        <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Masuk</button>-->
-      </form>
-      <p class="debugger"></p>
+        <hr>
+        <!-- Page Features -->
+        <div class="row">
+
+            <div class="col-md-4 col-sm-6 hero-feature text-center">
+                <div class="thumbnail">
+                    <header class="caption">
+                        <h2>Mobile ID</h2>
+                    </header>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 hero-feature text-center">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3>Verifikasi Identitas</h3>
+                        <p>
+                            <a href="verify.php" class="btn btn-primary">Verifikasi</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 hero-feature">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title"><strong>Log In</strong></h3></div>
+                    <div class="panel-body">
+                        <form role="form" class="form-signin" action="login.php" method="post">
+                            <div class="form-group">
+                                <label for="id-number">Nomer KTP</label>
+                                <input type="text" maxlength="16" class="form-control numeric" id="id-number" name="no_ktp" placeholder="Masukkan 16 digit nomer KTP">
+                            </div>
+                            <!-- <a href="#" class="btn btn-primary">Log in</a> -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <p class="debugger"></p>
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </footer>
+
     </div>
-    <!-- /container -->
-    <hr>
-    <hr>
-  </body>
+    <!-- /.container -->
+</body>
 
 </html>
-<?php
-// }
-?>
