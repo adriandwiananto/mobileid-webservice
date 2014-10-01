@@ -1,8 +1,14 @@
 <?php
 // require_once('../lib/filemanipulation.php');
+include('./addr-path.php');
 
-$id_number = $_POST["no_ktp"];
-$CAaddr = "http://localhost/ca/mobileid-CA/tanyaidentitas/daftarrequestCA.php";
+if(isset($_POST["no_ktp"])){
+    $id_number = $_POST["no_ktp"];
+}
+else{
+    header("Location: ./");
+    die();
+}
 
 function sendpost($url,$data) {
     $options = array(

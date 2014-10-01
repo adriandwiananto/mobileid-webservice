@@ -1,3 +1,17 @@
+<?php
+// require_once('../lib/filemanipulation.php');
+session_start();
+if(isset($_SESSION["no_ktp"])){
+    $id_number = $_SESSION["no_ktp"];
+    $nama = $_SESSION["nama"];
+}
+else{
+    header("Location: ./");
+    die();
+}
+// echo $nama." ".$id_number;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +30,7 @@
 <div class="container">
 
 <div class="page-header">
-    <h1>Mobile ID <small>Simulasi halaman utama</small></h1>
+    <h1>Simulasi Mobile ID <small><?php echo $id_number.", ".$nama;?></small></h1>
 </div>
 
 <!-- Accordion - START -->
@@ -39,7 +53,7 @@
                                     <li class="list-group-item"><span class="glyphicon glyphicon-minus text-warning"></span> <a>Delete Blog</a></li> -->
                                 </ul>
                             </li>
-                            <li class="list-group-item"><span class="glyphicon glyphicon-log-out text-success"></span> <a>Log out</a></li>
+                            <li class="list-group-item"><span class="glyphicon glyphicon-log-out text-success"></span> <a href="session_destroyer.php">Log out</a></li>
                         </ul>
                     </div>
                 </div>

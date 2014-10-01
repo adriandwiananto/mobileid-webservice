@@ -1,8 +1,14 @@
 <?php
 // require_once('../lib/filemanipulation.php');
+include('./addr-path.php');
 
-$id_number = $_POST["no_ktp"];
-$CAaddr = "http://localhost/ca/mobileid-CA/tanyaidentitas/daftarrequestCA.php";
+if(isset($_POST["no_ktp"])){
+    $id_number = $_POST["no_ktp"];
+}
+else{
+    header("Location: ./");
+    die();
+}
 
 function sendpost($url,$data) {
     $options = array(
@@ -54,6 +60,12 @@ sleep(2);
 	                        } else {
 	                        	$('#response').html("Log in berhasil!");
 	                        	//delay >> redirect
+	                        	var nama = obj.data_from_file[1].substr(6);
+	                        	$.post("./session_starter.php", {"no_ktp":'<?php echo $id_number;?>', "nama": nama}, function(results) {
+	                        		// $.delay(1000);
+								  // alert(results); // alerts 'Updated'
+									window.location.replace('loggedin.php');
+								});
 	                        }
                         }
                     }
