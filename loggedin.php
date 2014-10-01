@@ -1,5 +1,7 @@
 <?php
 // require_once('../lib/filemanipulation.php');
+require 'rb.php';
+
 session_start();
 if(isset($_SESSION["no_ktp"])){
     $id_number = $_SESSION["no_ktp"];
@@ -10,6 +12,26 @@ else{
     die();
 }
 // echo $nama." ".$id_number;
+R::setup('sqlite:./database/'.$id_number.'.s3db');
+$approval_count = R::count('approval');
+
+if(isset($_POST["clicked"])){
+    echo "CLICKED";
+}
+
+// RedbeanPHP Load example
+// $approval = R::load( 'approval', 1 ); //reloads our book
+// echo $approval;
+
+// RedbeanPHP Store example
+// $setor = R::dispense('approval');
+// $setor->title = 'Bolos';
+// $setor->content = 'Izin bolos karena males kerja';
+// $setor->hash = '494874d6f13caa86f69b0a59c7dce6312ea1066b012ea1b5afd6da905843f913';
+// R::store($setor);
+
+// $approval = R::load('approval',3);
+// echo $approval;
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +69,17 @@ else{
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <ul class="list-group">
                             <li class="list-group-item"><span class="glyphicon glyphicon-envelope text-primary"></span> <a>Daftar Approval</a>
-                                <ul class="list-group approval-list">
+                                <ul class="list-group approval-group-list">
+                                    <?php
+                                        if($approval_count > 0){
+                                            $approval = array();
+                                            for($id=1;$id<=$approval_count;$id++){
+                                                $index = $id-1;
+                                                $approval[$index] = R::load('approval',$id);
+                                                echo '<li class="list-group-item approval-list"><span class="glyphicon glyphicon-minus text-primary"></span> <a href="#">'.$approval[$index]["title"].'</a></li>';
+                                            }
+                                        }
+                                    ?>
                                    <!--  <li class="list-group-item"><span class="glyphicon glyphicon-minus text-primary"></span> <a>Edit Blog</a></li>
                                     <li class="list-group-item"><span class="glyphicon glyphicon-minus text-success"></span> <a>Publish Blog</a></li>
                                     <li class="list-group-item"><span class="glyphicon glyphicon-minus text-warning"></span> <a>Delete Blog</a></li> -->
@@ -62,17 +94,51 @@ else{
         <div class="col-sm-9 col-md-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Menu Information</h3>
+                    <h3 class="panel-title content-title">Menu Information</h3>
                 </div>
                 <div class="panel-body">                    
-                    <div class="alert alert-success">
-                        <h3>Review the information supplied in this section to get to know something more about the company, blogs and contents.</h3>
+                    <div class="alert alert-success content-container">
+                        <h3 class="content-main-title">Title Placeholder</h3>
+                        <h5 class="content-main-body">Review the information supplied in this section to get to know something more about the company, blogs and contents.</h5>
                     </div>
+                    <div class="btn-container">
+                        <!-- <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button> -->
+                    </div>
+                    <!-- <button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button> -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+$('.approval-group-list .approval-list').click(function() {
+    // get the contents of the link that was clicked
+    var listIndex = $(this).index();
+    var signBtn = '<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button>';
+    var unsignBtn = '<button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button>';
+    // alert(listIndex);
+    $.ajax(
+    {
+        url: "fetchdbdata.php",
+        type: "POST",
+
+        data: { "clicked": listIndex },
+        success: function (result) {
+            // alert(result);
+            var objResult = jQuery.parseJSON(result);
+            $('.content-title').html("Approval");
+            $('.content-main-title').html(objResult.title);
+            $('.content-main-body').html(objResult.content);
+            if(!objResult.signature){
+                $('.btn-container').html(signBtn);
+            } else {
+                $('.btn-container').html(unsignBtn);
+            }
+        }
+    });
+});
+</script>
 
 <style>
     body {
