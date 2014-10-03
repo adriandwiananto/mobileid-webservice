@@ -47,7 +47,8 @@ sleep(2);
                 $.ajax(
                     {
                         type: 'GET',
-                        url: "http://localhost/ca/mobileid-CA/tanyaidentitas/poll-server.php?timestamp="+timestamp+"&file_id="+file_id,
+                        
+                        url: "<?php echo $Polladdr; ?>?timestamp="+timestamp+"&file_id="+file_id,
                         success: function(data){
                             // put result data into "obj"
                             var obj = jQuery.parseJSON(data);
