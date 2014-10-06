@@ -1,6 +1,7 @@
 <?php
 // require_once('../lib/filemanipulation.php');
 require 'rb.php';
+include('./addr-path.php');
 
 session_start();
 if(isset($_SESSION["no_ktp"])){
@@ -104,6 +105,7 @@ if(isset($_POST["clicked"])){
                     <div class="btn-container">
                         <!-- <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button> -->
                     </div>
+                    <p class="debug-container"></p>
                     <!-- <button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button> -->
                 </div>
             </div>
@@ -112,21 +114,17 @@ if(isset($_POST["clicked"])){
 </div>
 
 <script type="text/javascript">
-$('.approval-group-list .approval-list').click(function() {
-    // get the contents of the link that was clicked
-    var listIndex = $(this).index();
-    var signBtn = '<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button>';
-    var unsignBtn = '<button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button>';
-    // alert(listIndex);
+function dbfetch(index){
     $.ajax(
     {
         url: "fetchdbdata.php",
         type: "POST",
 
-        data: { "clicked": listIndex },
+        data: { "clicked": index },
         success: function (result) {
             // alert(result);
-            var objResult = jQuery.parseJSON(result);
+            // var objResult = jQuery.parseJSON(result);
+            objResult = jQuery.parseJSON(result);
             $('.content-title').html("Approval");
             $('.content-main-title').html(objResult.title);
             $('.content-main-body').html(objResult.content);
@@ -137,6 +135,42 @@ $('.approval-group-list .approval-list').click(function() {
             }
         }
     });
+}
+
+var listIndex;
+var objResult;
+var userid = <?php echo $id_number;?>;
+var callbackpath = '<?php echo $DBWriterPath;?>';
+var signBtn = '<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button>';
+var unsignBtn = '<button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button>'; 
+
+$('.approval-group-list .approval-list').click(function() {
+    // get the contents of the link that was clicked
+    // var listIndex = $(this).index();
+    listIndex = $(this).index();
+    
+    // alert(listIndex);
+    dbfetch(listIndex);
+    $('.debug-container').html('');
+});
+
+$('.btn-container').click(function() {
+    // get the contents of the link that was clicked
+    // $('.debug-container').html(objResult.id);
+    if(!objResult.signature){
+        $.ajax(
+        {
+            url: "<?php echo $SignWebAddr;?>",
+            type: "POST",
+
+            data: {"userid": userid,"id":objResult.id,"title":objResult.title,"content":objResult.content ,"hash":objResult.hash,"callbackpath":callbackpath},
+            success: function (result) {
+                // result = jQuery.parseJSON(result);
+                // $('.debug-container').html(result.status);
+                $('.debug-container').html(result);
+            }
+        });
+    }
 });
 </script>
 
