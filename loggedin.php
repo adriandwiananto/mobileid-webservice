@@ -102,9 +102,8 @@ if(isset($_POST["clicked"])){
                         <h3 class="content-main-title">Title Placeholder</h3>
                         <h5 class="content-main-body">Review the information supplied in this section to get to know something more about the company, blogs and contents.</h5>
                     </div>
-                    <div class="btn-container">
-                        <!-- <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button> -->
-                    </div>
+                    <div class="btn-container"></div>
+                    <!-- <div class="btn-verify-container"></div> -->
                     <p class="debug-container"></p>
                     <!-- <button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button> -->
                 </div>
@@ -129,20 +128,28 @@ function dbfetch(index){
             $('.content-main-title').html(objResult.title);
             $('.content-main-body').html(objResult.content);
             if(!objResult.signature){
+                $('.btn-container').html('');
                 $('.btn-container').html(signBtn);
+                // $('.btn-verify-container').html('');
+                $('.debug-container').html('');
             } else {
                 $('.btn-container').html(unsignBtn);
+                $('.btn-container').append(" ");
+                $('.btn-container').append(verifyBtn);
+                // $('.btn-verify-container').html(verifyBtn);
+                $('.debug-container').html("Signature: "+objResult.signature+"\nSigner: "+objResult.signer);
             }
         }
     });
 }
 
-var listIndex;
+var listIndex = 0;
 var objResult;
 var userid = <?php echo $id_number;?>;
 var callbackpath = '<?php echo $DBWriterPath;?>';
-var signBtn = '<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button>';
-var unsignBtn = '<button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button>'; 
+var signBtn = '<button class="btn btn-primary sign-btn" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button>';
+var unsignBtn = '<button class="btn btn-danger unsign-btn" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button>'; 
+var verifyBtn = '<button class="btn btn-success verify-btn" type="submit"><span class="glyphicon glyphicon-thumbs-up"></span>  Verify</button>'; 
 
 $('.approval-group-list .approval-list').click(function() {
     // get the contents of the link that was clicked
@@ -151,26 +158,98 @@ $('.approval-group-list .approval-list').click(function() {
     
     // alert(listIndex);
     dbfetch(listIndex);
-    $('.debug-container').html('');
 });
 
-$('.btn-container').click(function() {
-    // get the contents of the link that was clicked
-    // $('.debug-container').html(objResult.id);
-    if(!objResult.signature){
-        $.ajax(
-        {
-            url: "<?php echo $SignWebAddr;?>",
-            type: "POST",
+// $('.btn-container').click(function() {
+//     // get the contents of the link that was clicked
+//     // $('.debug-container').html(objResult.id);
+//     if(!objResult.signature){
+//         $.ajax(
+//         {
+//             url: "<?php echo $SignWebAddr;?>",
+//             type: "POST",
 
-            data: {"userid": userid,"id":objResult.id,"title":objResult.title,"content":objResult.content ,"hash":objResult.hash,"callbackpath":callbackpath},
-            success: function (result) {
-                // result = jQuery.parseJSON(result);
-                // $('.debug-container').html(result.status);
-                $('.debug-container').html(result);
-            }
-        });
-    }
+//             data: {"userid": userid,"id":objResult.id,"title":objResult.title,"content":objResult.content ,"hash":objResult.hash,"callbackpath":callbackpath},
+//             success: function (result) {
+//                 // result = jQuery.parseJSON(result);
+//                 // $('.debug-container').html(result.status);
+//                 $('.debug-container').html("click kembali daftar approval setelah konfirmasi melalui perangkat");
+//             }
+//         });
+//     } else {
+//         $.ajax(
+//         {
+//             url: "fetchdbdata.php",
+//             type: "POST",
+
+//             data: {"userid": userid,"id":objResult.id,"websign":objResult.signature,"signer":objResult.signer},
+//             success: function (result) {
+//                 // result = jQuery.parseJSON(result);
+//                 // $('.debug-container').html(result.status);
+//                 dbfetch(listIndex);
+//             }
+//         });
+//     }
+
+// });
+
+// $('.btn-verify-container').click(function(){
+//     // $('.debug-container').html("verify clicked");
+//     // alert("clicked");
+//     $.ajax(
+//     {
+//         url: "<?php echo $SignWebAddr;?>",
+//         type: "POST",
+
+//         data: {"hash":objResult.hash,"websign":objResult.signature,"signer":objResult.signer},
+//         success: function (result) {
+//             alert(result);
+//         }
+//     });
+// });
+
+
+$(document).on('click','.sign-btn',function(){
+    $.ajax(
+    {
+        url: "<?php echo $SignWebAddr;?>",
+        type: "POST",
+
+        data: {"userid": userid,"id":objResult.id,"title":objResult.title,"content":objResult.content ,"hash":objResult.hash,"callbackpath":callbackpath},
+        success: function (result) {
+            // result = jQuery.parseJSON(result);
+            // $('.debug-container').html(result.status);
+            $('.debug-container').html("click kembali daftar approval setelah konfirmasi melalui perangkat");
+        }
+    });
+});
+
+$(document).on('click','.unsign-btn',function(){
+    $.ajax(
+    {
+        url: "fetchdbdata.php",
+        type: "POST",
+
+        data: {"userid": userid,"id":objResult.id,"websign":objResult.signature,"signer":objResult.signer},
+        success: function (result) {
+            // result = jQuery.parseJSON(result);
+            // $('.debug-container').html(result.status);
+            dbfetch(listIndex);
+        }
+    });
+});
+
+$(document).on('click','.verify-btn',function(){
+    $.ajax(
+    {
+        url: "<?php echo $SignWebAddr;?>",
+        type: "POST",
+
+        data: {"hash":objResult.hash,"websign":objResult.signature,"signer":objResult.signer},
+        success: function (result) {
+            alert(result);
+        }
+    });
 });
 </script>
 
