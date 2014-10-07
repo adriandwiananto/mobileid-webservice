@@ -46,9 +46,12 @@ sleep(2);
                 var file_id = '<?php echo "$id_number.$pid"; ?>';
                 $.ajax(
                     {
-                        type: 'GET',
-                        
-                        url: "<?php echo $Polladdr; ?>?timestamp="+timestamp+"&file_id="+file_id,
+                        // type: 'GET',
+                        // url: "<?php echo $Polladdr; ?>?timestamp="+timestamp+"&file_id="+file_id,
+                        type: 'POST',
+                        url: "<?php echo $Polladdr; ?>",
+                        crossDomain: true,
+                        data: {"timestamp":timestamp, "file_id":file_id},
                         success: function(data){
                             // put result data into "obj"
                             var obj = jQuery.parseJSON(data);
