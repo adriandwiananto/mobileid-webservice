@@ -1,4 +1,7 @@
 <?php
+
+set_time_limit(120);
+
 // require_once('../lib/filemanipulation.php');
 include('./addr-path.php');
 
@@ -39,7 +42,7 @@ sleep(2);
 ?>
 <html>
 	<head>
-		<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript">
             function getContent(timestamp)
             {

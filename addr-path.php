@@ -1,10 +1,23 @@
 <?php
-$CAaddr = "http://localhost/ca/mobileid-CA/tanyaidentitas/daftarrequestCA.php";
-// $CAaddr = "http://red-trigger-44-141737.apse1.nitrousbox.com/CA/tanyaidentitas/daftarrequestCA.php";
-$Polladdr = "http://localhost/ca/mobileid-CA/tanyaidentitas/poll-server.php";
-// $Polladdr = "http://red-trigger-44-141737.apse1.nitrousbox.com/CA/tanyaidentitas/poll-server.php";
-$SignWebAddr = "http://localhost/ca/mobileid-CA/tanyaidentitas/signweb.php";
-// $SignWebAddr = "";
-$DBWriterPath = "http://localhost/webservice/writedbdata.php";
-// $DBWriterPath = "";
+
+// $CAglobaladdr = "http://localhost/ca/mobileid-CA/";
+$CAglobaladdr = "https://mobileid-ca-c9-bramleksono.c9.io/";
+
+// $SIaddr = "http://192.168.2.101/SI/mobileid-SI/";
+$SIaddr = "https://mobileid-si-c9-bramleksono.c9.io/";
+
+// $Webaddr = "http://localhost/webservice/";
+$Webaddr = "https://mobileid-webservice-c9-bramleksono.c9.io/";
+
+$CAaddr = $CAglobaladdr."tanyaidentitas/daftarrequestCA.php";
+$Polladdr = $CAglobaladdr."tanyaidentitas/poll-server.php";
+$SignWebAddr = $CAglobaladdr."tanyaidentitas/signweb.php";
+$CAdocsignaddr = $CAglobaladdr."tanyaidentitas/daftardocsign.php";
+$CAaskuserinitial = $CAglobaladdr."tanyaidentitas/tanyainisial.php";
+
+$SignDocAddr = $SIaddr."terimadocfile.php";
+
+$DBWriterPath = $Webaddr."writedbdata.php";
+$DocSenderPath = $Webaddr."docsign-sender.php";
+$DocReceiverPath = $Webaddr."docsign-receiver.php";
 ?>

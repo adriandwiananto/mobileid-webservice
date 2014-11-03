@@ -1,4 +1,6 @@
 <?php
+set_time_limit(120);
+
 // require_once('../lib/filemanipulation.php');
 include('./addr-path.php');
 
@@ -28,6 +30,7 @@ function sendpost($url,$data) {
 
 $request = json_decode(file_get_contents("template.json"), true);
 $request["ASK"]["NIK"] = $id_number;
+unset($request["META"]["CallbackURL"]);
 $sendquery  = sendpost($CAaddr,$request);
 
 if ($sendquery["STATUS"]["Success"] == true) {
@@ -37,8 +40,7 @@ if ($sendquery["STATUS"]["Success"] == true) {
 
 <html>
     <head>
-        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-        <!--<script type="text/javascript" src="client.js"></script>-->
+        <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript">
             // function getContent(file_id,timestamp)
             function getContent(timestamp)

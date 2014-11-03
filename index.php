@@ -11,8 +11,8 @@
     <link href="css/heroic-features.css" rel="stylesheet">
 
     <!-- jQuery Version 1.11.0 -->
-    <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
-
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+        
     <!-- Bootstrap Core JavaScript -->
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
 

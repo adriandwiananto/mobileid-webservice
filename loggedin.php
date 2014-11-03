@@ -13,8 +13,38 @@ else{
     die();
 }
 // echo $nama." ".$id_number;
-R::setup('sqlite:./database/'.$id_number.'.s3db');
+
+//cek apakah file database ada
+$dbpath = './database/'.$id_number.'.s3db';
+if (!file_exists($dbpath)) {
+    $myfile = fopen($dbpath, "w") or die("Unable to create database file! ".$dbpath);
+    fclose($myfile);
+}
+
+R::setup('sqlite:'.$dbpath);
 $approval_count = R::count('approval');
+$document_count = R::count('docsigning');
+$userdb = R::load('userclass',1);
+$userclass = $userdb->classtype;
+$_SESSION["userclass"] = $userclass;
+
+$textuserclass = translateuserclass($userclass);
+$_SESSION["textuserclass"] = $textuserclass;
+
+
+function translateuserclass($userclass) {
+    switch ($userclass) {
+    case 1:
+        return "Pihak Pemilik Identitas";
+        break;
+    case 2:
+        return "Pihak Legal";
+        break;        
+    default:
+        return "Visitor";
+        break;
+    }
+}
 
 if(isset($_POST["clicked"])){
     echo "CLICKED";
@@ -33,6 +63,23 @@ if(isset($_POST["clicked"])){
 
 // $approval = R::load('approval',3);
 // echo $approval;
+
+/*
+//tambah database dokumen
+$id_number_legal="3271231008950005";
+$id_number="1231230509890001";
+$doc = R::dispense('docsigning');
+$doc->legal = $id_number_legal;
+$doc->title = '1.txt';
+$doc->content = 'ucapan selamat lebaran dari aaa';
+$doc->hash = '4e70af661ee8500a050293a12aea4ee3ad5d3976c80fbd392780dee9a9663ce1';
+$doc->signature = '';
+$doc->signer = '1231230509890001';
+$doc->modified = R::isoDateTime();
+
+$id = R::store( $doc );
+*/
+
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +92,7 @@ if(isset($_POST["clicked"])){
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.min.css" />
 
-    <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -53,7 +100,7 @@ if(isset($_POST["clicked"])){
 <div class="container">
 
 <div class="page-header">
-    <h1>Simulasi Mobile ID <small><?php echo $id_number.", ".$nama;?></small></h1>
+    <h1>Simulasi Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
 </div>
 
 <!-- Accordion - START -->
@@ -86,6 +133,9 @@ if(isset($_POST["clicked"])){
                                     <li class="list-group-item"><span class="glyphicon glyphicon-minus text-warning"></span> <a>Delete Blog</a></li> -->
                                 </ul>
                             </li>
+                            <li class="list-group-item"><span class="glyphicon glyphicon-envelope text-primary"></span> <a href="document-list.php">Daftar Dokumen</a></li>
+                            <?php if ($userclass == 2) echo '<li class="list-group-item"><span class="glyphicon glyphicon-envelope text-primary"></span> <a href="document-verify-list.php">Daftar Verifikasi Dokumen</a></li>
+                            ';?>
                             <li class="list-group-item"><span class="glyphicon glyphicon-log-out text-success"></span> <a href="session_destroyer.php">Log out</a></li>
                         </ul>
                     </div>
