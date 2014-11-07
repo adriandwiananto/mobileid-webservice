@@ -17,22 +17,6 @@ else{
     die();
 }
 
-function sendpost($url,$data) {
-    $options = array(
-        'http' => array(
-            'method'  => 'POST',
-            'content' => json_encode( $data ),
-            'header'=>  "Content-Type: application/json\r\n" .
-                        "Accept: application/json\r\n"
-          )
-    );
-
-    $context     = stream_context_create($options);
-    $result      = file_get_contents($url, false, $context);
-    $response    = json_decode($result, true);
-    return $response;
-}
-
 //var_dump($_POST);
 
 R::setup('sqlite:database/docsigning.s3db');
@@ -82,13 +66,18 @@ if ($caripid[0]) {
         //kirim permintaan identitas
         $request = json_decode(file_get_contents("./template.json"), true);
         $request["ASK"]["NIK"] = $signerid;
-
         $sendquery  = sendpost($CAaddr,$request);
         $askCAid = $sendquery["STATUS"]["PID"]; //simpan CA PID untuk lihat identitas
 
         buatentrysigner($doc,$signerid,$askCAid);
         
         $copy_dir = "documents/".$signerid."/";
+        
+        //cek jika folder belum ada
+        if (!file_exists($copy_dir)) {
+            mkdir($copy_dir, 0755, true);
+        }
+        
         $copy_dir = $copy_dir . basename( $_FILES["uploadFile"]["name"]).".".$doc->pid;
         copy($final_file, $copy_dir);
         //echo "signer dibuat";

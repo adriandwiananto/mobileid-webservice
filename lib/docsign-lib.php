@@ -5,6 +5,11 @@ function hitunghashfile($file) {
     return hash_file($algo,$file);
 }
 
+function hitunghashdata($string) {
+    $algo = "sha256";
+    return hash($algo,$string);
+}
+
 function hash_compare($a, $b) {
     if (!is_string($a) || !is_string($b)) { 
         return false; 
@@ -49,4 +54,37 @@ function sendfile($data,$target_url) {
 	curl_close ($ch);
 	$result;
 }
+
+function sendencodedpost($url,$data) {
+    $options = array(
+        'http' => array(
+            'method'  => 'POST',
+            'content' => http_build_query($data),
+            'header'=>  "Content-type: application/x-www-form-urlencoded"
+          )
+    );
+
+    $context     = stream_context_create($options);
+    $result      = file_get_contents($url, false, $context);
+    $response    = json_decode($result, true);
+    return $response;
+    // return $result;
+}
+
+function sendpost($url,$data) {
+    $options = array(
+        'http' => array(
+            'method'  => 'POST',
+            'content' => json_encode( $data ),
+            'header'=>  "Content-Type: application/json\r\n" .
+                        "Accept: application/json\r\n"
+          )
+    );
+    $context     = stream_context_create($options);
+    $result      = file_get_contents($url, false, $context);
+    $response    = json_decode($result, true);
+    return $response;
+}
+
+
 ?>

@@ -3,7 +3,9 @@
 require 'rb.php';
 include('./addr-path.php');
 
+
 session_start();
+
 if(isset($_SESSION["no_ktp"])){
     $id_number = $_SESSION["no_ktp"];
     $nama = $_SESSION["nama"];
@@ -100,7 +102,7 @@ $id = R::store( $doc );
 <div class="container">
 
 <div class="page-header">
-    <h1>Simulasi Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
+    <h1>Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
 </div>
 
 <!-- Accordion - START -->
@@ -120,11 +122,9 @@ $id = R::store( $doc );
                                 <ul class="list-group approval-group-list">
                                     <?php
                                         if($approval_count > 0){
-                                            $approval = array();
-                                            for($id=1;$id<=$approval_count;$id++){
-                                                $index = $id-1;
-                                                $approval[$index] = R::load('approval',$id);
-                                                echo '<li class="list-group-item approval-list"><span class="glyphicon glyphicon-minus text-primary"></span> <a href="#">'.$approval[$index]["title"].'</a></li>';
+                                            $approvallist = R::findAll( 'approval' );
+                                            foreach ($approvallist as $approval) {
+                                                echo '<li class="list-group-item approval-list"><span class="glyphicon glyphicon-minus text-primary"></span> <a href="#">'.$approval->title.'</a></li>';
                                             }
                                         }
                                     ?>

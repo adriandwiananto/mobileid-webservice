@@ -4,7 +4,7 @@ class UserDB {
 	
     public function __construct()
 	{
-        //require_once('../rb.php');
+        require_once('../rb.php');
 	}
 	
 	public function prepareDB($dbpath) {
@@ -92,12 +92,12 @@ function translateuserclass($userclass) {
 	}
 }
 
-$id_number="1231230509890002";
+$id_number="1231230509890005";
 $dbpath = '../database/'.$id_number.'.s3db';
 
 $user = new UserClassDB;
 $user->prepareDB($dbpath);
-//$user->setUserclass($id_number,2);
+$user->setUserclass($id_number,2);
 $data = $user->getUserclass();
 echo translateuserclass($data->classtype);
 //var_dump($data);

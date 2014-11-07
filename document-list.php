@@ -17,7 +17,6 @@ else{
 
 R::setup('sqlite:database/docsigning.s3db');
 
-$caridocstatus > 0;
 switch($userclass) {
     case 1:
         $doclist = carisigner($id_number);

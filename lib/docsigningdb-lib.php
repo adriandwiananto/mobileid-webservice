@@ -111,4 +111,34 @@ function cekjumlahsignature($pid) {
     } else return 0;
 }
 
+function buatapproval($pid) {
+    date_default_timezone_set('Asia/Jakarta');
+    $tanggal = date('Y-m-d H:i:s')." WIB";
+    
+    //ambil data dokumen
+    R::selectDatabase('docsigningdb');
+    $doc = caridocdgnpid($pid);
+    $legal = $doc->legal;
+    $doctitle = $doc->title;
+    $dochash = $doc->hash;
+    
+    //ambil daftar signer
+    $listsigner = carisignerdaripid($pid);
+    foreach ($listsigner as $signer) {
+        $list .=$signer->signer_id." ";
+    }
+    $content = "Dokumen ".$doctitle." dengan hash ".$dochash." sudah ditandatangan oleh pemilik identitas ".$list."dan disetujui oleh legal ".$legal." pada ".$tanggal;
+    
+    //tulis approval ke database legal
+    
+    R::selectDatabase('legaldb');
+    $docapproval = R::dispense('approval');
+    $docapproval->title = 'Approval Dokumen '.$doctitle;
+    $docapproval->content = $content;
+    $docapproval->hash = hitunghashdata($content);
+    R::store($docapproval);
+    
+    return 1;
+}
+
 ?>

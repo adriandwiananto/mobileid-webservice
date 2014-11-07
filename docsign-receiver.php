@@ -1,5 +1,6 @@
 <?php
 require_once('rb.php');
+require_once('addr-path.php');
 require_once('./lib/docsigningdb-lib.php');
 require_once('./lib/docsign-lib.php');
 
@@ -25,8 +26,9 @@ if (move_uploaded_file($_FILES['file_contents']['tmp_name'], $uploadfile)) {
     // cek terlebih dahulu ke database
     //if ( ($_POST["info"]="docsign") && (checktodatabase($id_number,$updating_index,$filename,$filehash)) ) {
         //jika benar, perbarui database
-        R::setup('sqlite:database/docsigning.s3db');
-        
+        R::addDatabase('docsigningdb','sqlite:./database/docsigning.s3db');
+        R::selectDatabase('docsigningdb');
+
         $docsig = reset(ceksigner($pid,$id_number));
         $docsig->signed_hash = $filehash;
     	$docsig->signature = $docsignature;
@@ -39,6 +41,16 @@ if (move_uploaded_file($_FILES['file_contents']['tmp_name'], $uploadfile)) {
             $doc = loaddocdb($docindex);
             $doc->docstatus=2;
             R::store($doc);
+            
+            //buat approval
+            $legal = $doc->legal;
+            R::addDatabase('legaldb','sqlite:./database/'.$legal.'.s3db');
+            $result = buatapproval($pid);
+            
+            //kirim pesan notifikasi
+            $senddata["id"] = $legal;
+            $senddata["content"] = "Dokumen ".$filename." dengan berita ".$doc->content." sudah selesai ditandatangan";
+            sendencodedpost($CAdocsignconfirm,$senddata);
         }
     //}
     //else echo "Header invalid";

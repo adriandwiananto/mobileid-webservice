@@ -14,6 +14,8 @@ $Polladdr = $CAglobaladdr."tanyaidentitas/poll-server.php";
 $SignWebAddr = $CAglobaladdr."tanyaidentitas/signweb.php";
 $CAdocsignaddr = $CAglobaladdr."tanyaidentitas/daftardocsign.php";
 $CAaskuserinitial = $CAglobaladdr."tanyaidentitas/tanyainisial.php";
+$CAdocsignconfirm = $CAglobaladdr."tanyaidentitas/daftarkonfirmasidocsignCA.php";
+
 
 $SignDocAddr = $SIaddr."terimadocfile.php";
 

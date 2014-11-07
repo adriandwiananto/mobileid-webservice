@@ -1,7 +1,4 @@
 <?php
-
-set_time_limit(120);
-
 // require_once('../lib/filemanipulation.php');
 include('./addr-path.php');
 

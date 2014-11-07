@@ -48,7 +48,7 @@ if(isset($_POST["clicked"])){
 <div class="container">
 
 <div class="page-header">
-    <h1>Simulasi Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
+    <h1>Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
 </div>
 
 <!-- Accordion - START -->

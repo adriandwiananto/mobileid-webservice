@@ -42,7 +42,7 @@ if(isset($_POST["clicked"])){
 <div class="container">
 
 <div class="page-header">
-    <h1>Simulasi Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
+    <h1>Mobile ID <small><?php echo $id_number.", ".$nama.", ".$textuserclass;?></small></h1>
 </div>
 
 <!-- Accordion - START -->
@@ -92,6 +92,7 @@ if(isset($_POST["clicked"])){
                     echo "<h4>Hash: ".$doc->hash."</h4>";
      
                     $filename = $doc->title.".".$doc->pid;
+                    $docrequest = "Permintaan tandatangan dokumen ".$doc->title." dengan berita ".$doc->content." dan legal ".$doc->legal;
                     
                     $filepath = './documents/'.$id_number.'/'.$filename;
                     //$signedpath = './documents/'.$id_number.'/signed/signed.'.$filename;
@@ -104,8 +105,9 @@ if(isset($_POST["clicked"])){
 
                     echo '</ol>';
                     $statussigner = reset(ceksigner($doc->pid,$id_number)); //bernilai ada, jika id number adalah signer dari dokumen ini
-                    
-                    if (($status == 1) && ($statussigner->id != 0)) {
+                    //var_dump($statussigner);
+                    //syarat tombol sign ditampilkan: id ini belum tandatangan
+                    if ((!isset($statussigner->signature)) && ($id_number == $statussigner->signer_id)) {
                         echo '<div class="confirmation column"><form>';
                         echo '<label><input id="confirm" name="confirm" type="checkbox" onclick="validate()" />Saya setuju untuk menandatangani dokumen diatas</label>';
                         echo '</form></div>';
@@ -147,7 +149,7 @@ if(isset($_POST["clicked"])){
 				    $signerindex = 1;
 				    foreach ($listsigner as $signer) {
 				        $signature = $signer->signature;
-                        if ($signature) {
+                        if (isset($signature)) {
                             echo '<tr class="success">';
                             $finalfile = './documents/'.$signer->signer_id.'/signed/signed.'.$filename; 
                             if (($id_number == $doc->legal) || ($id_number == $signer->signer_id))
@@ -227,7 +229,7 @@ $(document).on('click','.docsign-btn',function(){
         url: '<?php echo $CAdocsignaddr;?>',
         type: "POST",
 
-        data: {"userid": userid,"id":index,"title":'<?php echo $doc->title; ?>',"content":'<?php echo $doc->content; ?>',"hash":'<?php echo $doc->hash; ?>',"callbackpath":callbackpath},
+        data: {"userid": userid,"id":index,"title":'<?php echo $doc->title; ?>',"content":'<?php echo $docrequest; ?>',"hash":'<?php echo $doc->hash; ?>',"callbackpath":callbackpath},
         success: function (result) {
 			 alert(result);
             // result = jQuery.parseJSON(result);
