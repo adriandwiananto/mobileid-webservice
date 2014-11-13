@@ -49,7 +49,7 @@ if (move_uploaded_file($_FILES['file_contents']['tmp_name'], $uploadfile)) {
             
             //kirim pesan notifikasi
             $senddata["id"] = $legal;
-            $senddata["content"] = "Dokumen ".$filename." dengan berita ".$doc->content." sudah selesai ditandatangan";
+            $senddata["content"] = "Dokumen ".$filename." dengan berita ".$doc->content." sudah selesai ditandatangan oleh semua pihak";
             sendencodedpost($CAdocsignconfirm,$senddata);
         }
     //}

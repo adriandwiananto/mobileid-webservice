@@ -183,7 +183,7 @@ function dbfetch(index){
                 // $('.btn-verify-container').html('');
                 $('.debug-container').html('');
             } else {
-                $('.btn-container').html(unsignBtn);
+                $('.btn-container').html(deleteBtn);
                 $('.btn-container').append(" ");
                 $('.btn-container').append(verifyBtn);
                 // $('.btn-verify-container').html(verifyBtn);
@@ -198,7 +198,7 @@ var objResult;
 var userid = <?php echo $id_number;?>;
 var callbackpath = '<?php echo $DBWriterPath;?>';
 var signBtn = '<button class="btn btn-primary sign-btn" type="submit"><span class="glyphicon glyphicon-ok"></span>  Sign</button>';
-var unsignBtn = '<button class="btn btn-danger unsign-btn" type="submit"><span class="glyphicon glyphicon-remove"></span>  Un-sign</button>'; 
+var deleteBtn = '<button class="btn btn-danger delete-btn" type="submit"><span class="glyphicon glyphicon-remove"></span>  Delete</button>'; 
 var verifyBtn = '<button class="btn btn-success verify-btn" type="submit"><span class="glyphicon glyphicon-thumbs-up"></span>  Verify</button>'; 
 
 $('.approval-group-list .approval-list').click(function() {
@@ -209,54 +209,6 @@ $('.approval-group-list .approval-list').click(function() {
     // alert(listIndex);
     dbfetch(listIndex);
 });
-
-// $('.btn-container').click(function() {
-//     // get the contents of the link that was clicked
-//     // $('.debug-container').html(objResult.id);
-//     if(!objResult.signature){
-//         $.ajax(
-//         {
-//             url: "<?php echo $SignWebAddr;?>",
-//             type: "POST",
-
-//             data: {"userid": userid,"id":objResult.id,"title":objResult.title,"content":objResult.content ,"hash":objResult.hash,"callbackpath":callbackpath},
-//             success: function (result) {
-//                 // result = jQuery.parseJSON(result);
-//                 // $('.debug-container').html(result.status);
-//                 $('.debug-container').html("click kembali daftar approval setelah konfirmasi melalui perangkat");
-//             }
-//         });
-//     } else {
-//         $.ajax(
-//         {
-//             url: "fetchdbdata.php",
-//             type: "POST",
-
-//             data: {"userid": userid,"id":objResult.id,"websign":objResult.signature,"signer":objResult.signer},
-//             success: function (result) {
-//                 // result = jQuery.parseJSON(result);
-//                 // $('.debug-container').html(result.status);
-//                 dbfetch(listIndex);
-//             }
-//         });
-//     }
-
-// });
-
-// $('.btn-verify-container').click(function(){
-//     // $('.debug-container').html("verify clicked");
-//     // alert("clicked");
-//     $.ajax(
-//     {
-//         url: "<?php echo $SignWebAddr;?>",
-//         type: "POST",
-
-//         data: {"hash":objResult.hash,"websign":objResult.signature,"signer":objResult.signer},
-//         success: function (result) {
-//             alert(result);
-//         }
-//     });
-// });
 
 
 $(document).on('click','.sign-btn',function(){
@@ -274,7 +226,7 @@ $(document).on('click','.sign-btn',function(){
     });
 });
 
-$(document).on('click','.unsign-btn',function(){
+$(document).on('click','.delete-btn',function(){
     $.ajax(
     {
         url: "fetchdbdata.php",

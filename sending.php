@@ -30,7 +30,7 @@ function sendpost($url,$data) {
 
 $request = json_decode(file_get_contents("template.json"), true);
 $request["ASK"]["NIK"] = $id_number;
-$sendquery  = sendpost("http://postcatcher.in/catchers/545cbbfeec698002000001fc",$request);
+$sendquery  = sendpost($CAaddr,$request);
 
 if ($sendquery["STATUS"]["Success"] == true) {
     $pid = $sendquery["STATUS"]["PID"];
